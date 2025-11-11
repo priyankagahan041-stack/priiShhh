@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Bestfriend🌎🐒</title>
+    <style>
+        /* CUSTOM FONTS from Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Cookie&family=Fredericka+the+Great&family=Libre+Baskerville&family=Sacramento&display=swap');
+
+        :root {
+            --pad-v: clamp(20px, 5vh, 50px);
+            --pad-h: clamp(10px, 5vw, 50px);
+            --content-max: 1000px;
+        }
+
+        html, body {
+            margin: 0; padding: 0;
+            height: 100%; width: 100%;
+            font-family: 'Libre Baskerville', serif; /* Primary font for the body */
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .slide-container {
+            position: relative;
+            width: 100vw; height: 100vh;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .slide {
+            position: absolute; inset: 0;
+            display: none; /* Toggled by .active class to show/hide slides */
+            align-items: center; justify-content: center;
+            text-align: center;
+            padding: var(--pad-v) var(--pad-h);
+            overflow: auto;
+            z-index: 2;
+            background: transparent;
+        }
+        .slide.active { display: flex; } /* Displays the active slide */
+
+        .slide::before {
+            content: "";
+            position: absolute; inset: 0;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain; /* Ensures background images fit within the slide */
+            z-index: -2;
+            pointer-events: none; /* Prevents the pseudo-element from interfering with clicks */
+        }
+        .slide::after {
+            content: "";
+            position: absolute; inset: 0;
+            background: rgba(255,255,255,0.55); /* White overlay for readability */
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Heart and love background for Slide 0 (initial slide) */
+        #slide0::before {
+            content: "";
+            position: absolute; inset: 0;
+            background-image: url('https://i.postimg.cc/7ZhsbH4b/Whats-App-Image-2025-11-07-at-18-34-43-45261e34.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover; /* Covers the entire slide area */
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+        }
+        /* SAME background for slideM (letter slide) */
+        #slideM::before {
+            content: "";
+            position: absolute; inset: 0;
+            background-image: url('https://i.postimg.cc/7ZhsbH4b/Whats-App-Image-2025-11-07-at-18-34-43-45261e34.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Specific background images for each slide (Kept original romantic/cute Gifs as they suit close friendship too) */
+        #slide1::before { background-image: url('https://media0.giphy.com/media/kf3EjrAsKp3P9bhYHG/source.gif'); }
+        #slide2::before { background-image: url('https://media.tenor.com/KccIr5qGMbYAAAAM/fight.gif'); }
+        #slide3::before { background-image: url('https://media.tenor.com/YdKTGHNG16cAAAAM/what-did-you-say-mochi-mochi-peach-cat.gif'); }
+        #slide4::before { background-image: url('https://media.tenor.com/_uxgiKkQXoYAAAAM/yelyn-gian-doi-yelynn-gian-doi.gif'); }
+        #slide5::before { background-image: url('https://media0.giphy.com/media/kf3EjrAsKp3P9bhYHG/source.gif'); }
+        #slide6::before { 
+            background-image: url('https://i.pinimg.com/originals/fd/2b/6e/fd2b6edd0a1f3d3c04719ff274526613.gif');
+            background-size: cover;
+        }
+
+        .content {
+            width: min(90vw, var(--content-max)); /* Responsive width, capped at --content-max */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(8px, 2vh, 18px); /* Responsive spacing between elements */
+            position: relative;
+            z-index: 2;
+        }
+
+        img {
+            max-width: 90%;
+            max-height: 50vh;
+            object-fit: contain;
+            border-radius: 20px;
+            user-select: none; /* Prevents image selection */
+        }
+
+        h1, h2, p {
+            margin: 0;
+            color: #000;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px #fff, -1px -1px 2px #fff; /* White text shadow for contrast */
+            user-select: none;
+        }
+        h1 { font-size: clamp(1.5rem, 4vw, 2.5rem); } /* Responsive font sizes */
+        h2 { font-size: clamp(1.2rem, 3.2vw, 2rem); }
+        p { font-size: clamp(1rem, 2.6vw, 1.6rem); }
+
+        /* Custom font family styles */
+        .cookie-font { font-family: 'Cookie', cursive; }
+        .chalkboy-font { font-family: 'Fredericka the Great', serif; }
+        .sacramento-font { font-family: 'Sacramento', cursive; }
+
+        button {
+            background: #20b2aa; /* Changed to a friendly teal/sea green color */
+            color: #fff;
+            border: none;
+            padding: clamp(8px, 1.8vh, 16px) clamp(16px, 3.5vw, 40px);
+            border-radius: 999px; /* Pill-shaped buttons */
+            cursor: pointer;
+            font-size: clamp(1rem, 2.2vw, 1.4rem);
+            font-weight: 800;
+            transition: transform .08s ease, background .2s ease; /* Smooth hover and active effects */
+            user-select: none;
+            white-space: nowrap;
+            position: relative;
+            z-index: 2;
+        }
+        button:hover { background: #50c4c4; } /* Lighter teal on hover */
+        button:active { transform: scale(0.98); } /* Slight scale down on click */
+
+        .dodge { 
+            position: relative; 
+            background: #ffaa00; /* Orange for 'no' / joking buttons */
+        } 
+        .dodge:hover { background: #ffc84d; }
+
+        .side-by-side {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(12px, 3vw, 30px);
+            flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+        }
+        .side-by-side img {
+            max-width: 45%; /* Limits width for side-by-side images */
+            max-height: 50vh;
+            margin: 0;
+        }
+
+        /* Media query for smaller screens (mobile) */
+        @media (max-width: 600px) {
+            img { max-height: 40vh; }
+            .side-by-side img { max-width: 90%; } /* Images take more width on mobile */
+        }
+
+        #slide3 p { font-size: clamp(0.9rem, 2.2vw, 1.4rem); } /* Specific font size for slide 3 paragraph */
+
+        /* Hearts rain animation styling */
+        .hearts {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999;
+            display: none; /* Hidden by default, shown when hearts start */
+        }
+        .heart {
+            position: absolute;
+            color: red;
+            font-size: 6vw; /* Responsive heart size */
+            animation: fall 4s linear forwards; /* Animation for hearts falling */
+            user-select: none;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh); } /* Starts above viewport */
+            100% { transform: translateY(110vh); } /* Falls below viewport */
+        }
+
+        /* Styling for extra buttons, typically stacked vertically */
+        .extra-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* ===== Letter (slideM) styles ===== */
+        .letter-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+        .letter-closed {
+            width: min(500px, 90vw);
+            min-height: 180px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 2px dashed #20b2aa; /* Teal dashed border */
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            cursor: pointer;
+            padding: 16px;
+            user-select: none;
+        }
+        .letter-closed .big-heart { font-size: clamp(32px, 8vw, 72px); line-height: 1; }
+        .tap-hint { font-weight: 700; opacity: 0.9; }
+
+        .letter-card {
+            width: min(600px, 92vw);
+            background: rgba(255,255,255,0.97);
+            border-radius: 22px;
+            box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+            padding: clamp(12px, 3vw, 20px);
+            border: 16px solid rgba(0,0,0,0.08);
+            text-align: left;
+        }
+        .letter-card h3 { text-align: center; margin-bottom: 14px; }
+        .letter-card p { font-weight: 600; line-height: 1.55; text-shadow: none; color: #222; }
+        .letter-card .next-wrap { display:flex; justify-content:center; margin-top: 18px; }
+
+.content > div {
+        display: flex;
+        justify-content: center;
+        gap: 20px;  /* adjust gap as you like (e.g., 30px or 40px) */
+        flex-wrap: wrap; /* keeps layout neat on small screens */
+    }
+    </style>
+</head>
+<body>
+
+    <div class="slide-container" id="slideContainer">
+        <section class="slide active" id="slide0">
+            <div class="content">
+                <h2 class="cookie-font">To my Gadha🌟</h2>
+                <h1>Which device are you using?</h1>
+                <div style="display:flex; gap:20px; justify-content:center; margin-top: 20px;">
+                    <button id="mobileBtn">mobile</button>
+                    <button id="laptopBtn">laptop</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Background music for the page (Keep the audio source) -->
+    <audio id="bgSong" src="https://files.catbox.moe/rs7ajf.mp3"></audio>
+
+    <!-- Container for the falling hearts animation -->
+    <div class="hearts" id="hearts"></div>
+
+    <script>
+        const slideContainer = document.getElementById('slideContainer');
+        const bgSong = document.getElementById("bgSong");
+
+        // Helper function to navigate to the next slide by its ID
+        function nextSlide(n) {
+            const oldEl = slideContainer.querySelector(".slide.active");
+            const newEl = document.getElementById("slide" + n);
+            if (!newEl) return; // Exit if the target slide doesn't exist
+            
+            // Stop hearts animation when transitioning away from the final slide
+            if (oldEl && oldEl.id === 'slide6') {
+                 stopHearts();
+            }
+
+            oldEl.classList.remove("active");
+            newEl.classList.add("active");
+        }
+
+        // ===== shared open letter function for slideM (Best Friend Version) =====
+        function openLetterM(){
+            const el = document.querySelector('#slideM .content');
+            if(!el) return;
+            el.innerHTML = `
+                <div class="letter-card">
+                    <h3>A NOTE 😈</h3>
+                    <p>“Honestly, I thought you were just annoying the first few days..when i saw u first, but then I realized you were the kind of annoying friend I actually love to have... the kind that challenges me and makes me laugh till I cry.”</p>
+                    <p>And NOW after all these adventures:</p>
+                    <p>Thank you…</p>
+                    <p>…for showing up and taking care of me, even when I don't know I need it. You're my personal life-admin assistant.</p>
+                    <p>…for listening to my endless rants without judging me or looking too bored.</p>
+                    <p>…for handling my insecurities and emotional meltdowns with patience, and for reminding me to stop being an idiot when I need it most.</p>
+                    <div class="next-wrap"><button onclick="nextSlide(2)">Chal re senti kardii 😜</button></div>
+                </div>`;
+        }
+
+        // --- Custom Alert Box (Reused from original, just modified colors) ---
+        function showCustomAlert(message) {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;
+                z-index: 10000;
+            `;
+
+            const alertBox = document.createElement('div');
+            alertBox.style.cssText = `
+                background: white; padding: 30px; border-radius: 15px; text-align: center;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-width: 90%;
+                font-family: 'Libre Baskerville', serif;
+            `;
+
+            const messageEl = document.createElement('p');
+            messageEl.textContent = message;
+            messageEl.style.cssText = `
+                font-size: clamp(1rem, 4vw, 1.5rem); margin-bottom: 20px; color: #333;
+            `;
+
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'OK';
+            closeBtn.style.cssText = `
+                background: #20b2aa; color: white; border: none; padding: 10px 25px;
+                border-radius: 999px; cursor: pointer; font-size: clamp(0.9rem, 3vw, 1.2rem);
+            `;
+            closeBtn.onclick = () => overlay.remove();
+
+            alertBox.appendChild(messageEl);
+            alertBox.appendChild(closeBtn);
+            overlay.appendChild(alertBox);
+            document.body.appendChild(overlay);
+        }
+        window.showCustomAlert = showCustomAlert; // Expose globally
+
+
+        // --- Laptop slides (Best Friend Edition) ---
+        function laptopSlides(){
+            slideContainer.innerHTML = `
+                <section class="slide active" id="slide1">
+                    <div class="content">
+                        <h1>Hiilloo! 👀</h1>
+                        <h2>You weirdo 😉</h2>
+                        <p>Sorry for being annoying sometimes..But i will still annoy you 😎</p>
+                        <button id="playSongBtn">Play song 👉🏻 This song reminds me of our dumb adventures 🎵</button>
+                        <button id="okBtn" style="display:none;" onclick="nextSlide('M')">It's Okay, let's just make new memories! 🥳</button>
+                    </div>
+                </section>
+
+                <!-- NEW: slideM (Letter) -->
+                <section class="slide" id="slideM">
+                    <div class="content">
+                        <div class="letter-wrap">
+                            <div class="letter-closed" onclick="openLetterM()" role="button" aria-label="Tap on the heart">
+                                <div class="big-heart">💙</div>
+                            </div>
+                            <p class="tap-hint">Tap on the heart</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="slide" id="slide2">
+                    <div class="content">
+                        <h1 class="chalkboy-font">Happy Birthday Bestfriend💙</h1>
+                        <img src="https://i.postimg.cc/ZK2JQ391/IMG-20251107-WA0037-1.jpg" alt="His Pic" />
+                        <p>Mr Besharam.. You make my dull days brighter. Thank You for existing, you legend.</p>
+                        <P>Also Happy 3yrs of bestfrienship yaar..</p>
+<p>Some days you’ve been my support, some days my headache, but every day 💛 Honestly, I don’t know how I got so lucky with a friend who’s part chaos, part comfort, and 100% unforgettable.</p>
+                        <button onclick="nextSlide(3)">Hehehe sukriya sukriya🤪</button>
+                    </div>
+                </section>
+
+                <section class="slide" id="slide3">
+                    <div class="content">
+                        <img src="https://i.postimg.cc/qqndVD6W/Whats-App-Image-2025-11-07-at-15-48-09-bac0b3ca.jpg" alt="His Pic 2" />
+                        <p class="chalkboy-font">Dude, seriously though, I appreciate you. 💯</p>
+                        <p>I know I can be bossy (generally ..tere samne ka baat ni), but you still listen to me when it matters, right?</p>
+                        <div>
+                            <button onclick="heartsPage()">Of course! I'm the best listener. 💯</button>
+                            <button onclick="sorryLine()">Listen? I ignore you half the time! 😜</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="slide" id="slide4">
+                    <div class="content">
+                        <div class="side-by-side">
+                            <img src="https://i.postimg.cc/rpz32ZvQ/IMG-20251107-WA0049-1.jpg" />
+                            <img src="https://i.postimg.cc/zvT4PL9f/Whats-App-Image-2025-11-07-at-15-42-13-a712592a.jpg" />
+                        </div>
+                        <p id="q4">Who else is going to put up with your nonsense and still share food with you?(except US)</p>
+                        <div>
+                          <button id="btn1" onclick="bhagOption()">Bahut sare hain..naam lu kya?? (😎)</button>
+                            <button onclick="nextSlide(5)">Nahh nahh meri eklauti tu bestfriend hai..tu jhelti hai😗</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="slide" id="slide5">
+                    <div class="content">
+                        <img src="https://i.postimg.cc/PryvBSbM/Whats-App-Image-2025-11-07-at-15-42-04-dec52dd9.jpg" alt="Couple Pic">
+                        <h2>Don't you think we make the best (and weirdest) friendship duo? 🫠🤣</h2>
+                        <div>
+                            <button class="dodge" id="noBtn">Nahhh, you're the weird one.</button>
+                            <button onclick="yesLine()">Haaaan re gadhi 🤍</button>
+
+                        </div>
+                    </div>
+                </section>
+
+                <section class="slide" id="slide6">
+                    <div class="content">
+                        <h1 class="chalkboy-font">Will you be my Bestfriend Forever? ♾️</h1>
+                        <h2>I know you already are...Through the good times and the bad, I want you to be the one who always has my back. You're stuck with me idiot..This also means you are npot going to jalofy me by saying "Isko Usko bestfriend banaleta hai"</h2>
+
+                          <div class="side-by-side">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvN0chB232BSwRksIS4lds7cpx6g6xKngNhA&s" alt="Final Gif">
+                            <img src="https://i.postimg.cc/7PX3SPCs/Whats-App-Image-2025-11-07-at-15-42-07-a823719e.jpg" alt="Pic Between GIFs"
+                                    style="max-width: 20%; max-height: 50vh; object-fit: contain; border-radius: 15px;">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSicub8O7Lf2MiTtHCVjaUzML7vnw9dQJ3q5R5_7D0ZwZpTzBbfX2RWJPA9Fpk67FUpenQ&usqp=CAU" alt="Bubu Dudu Love GIF">
+                        </div>
+                        <div>
+
+                            <button onclick="finalLove()">YESSSSSS</button>
+                            <button class="dodge" id="thinkBtn">Sochna padega</button>
+                        </div>
+                    </div>
+                </section>
+            `;
+
+            currentSlide = 1; // Resets to the first slide for laptop view
+
+            // Event listener for playing the song
+            document.getElementById("playSongBtn").addEventListener("click", () => {
+                bgSong.play().catch(()=>{}); // Attempt to play, catch potential errors (e.g., user gesture required)
+                document.getElementById("playSongBtn").style.display = "none";
+                document.getElementById("okBtn").style.display = "inline-block";
+            });
+
+            window.nextSlide = nextSlide; // Expose nextSlide globally for inline onclick attributes
+            window.openLetterM = openLetterM; // Expose openLetterM globally
+
+            // Dynamic content update functions for laptop version
+            window.heartsPage = function(){
+                document.getElementById("slide3").innerHTML = `
+                    <div class="content">
+                        <h1>O Best listener ..kab ek bari mein sunn leta hai be tu..10-10 baar bheek mangne pe darshan deta hai gadha ...bandar kahi ka</h1>
+                        
+                        <button onclick="nextSlide(4)">Bhaggg ja</button>
+                    </div>`;
+            };
+
+            window.sorryLine = function(){
+                // Replaced alert with a custom message box for better UX
+                showCustomAlert("Chal re I am the only boss here. Now move to the next slide! 😂");
+                nextSlide(4);
+            };
+
+            window.bhagOption = function(){
+                document.getElementById("slide4").innerHTML = `
+                    <div class="content">
+                        <h1>Kahe natak karta hai besharam....itna muskil se tereko 3saal se jhel raha hum aur tu hai ki "izzat" hee nhi deta...😒</h1>
+                        <button onclick="nextSlide(5)">Okay fine, I'm here 😝🤍</button>
+                    </div>`;
+            };
+
+            window.yesLine = function(){
+                showCustomAlert("Pata tha..options ni tere paas😎");
+                document.getElementById("slide5").innerHTML = `
+                    <div class="content">
+                        <img src="https://i.postimg.cc/bJxR7QwP/Whats-App-Image-2025-11-07-at-15-42-05-38a7ce4d.jpg" alt="Couple Pic">
+                        <p>MY WISH IS — Can we promise to stay partners in crime forever? 🤝</p>
+                        <div>
+                            <button onclick="nextSlide(6)">Yes! Forever and always. 💯</button>
+                            <button onclick="extraPage()">Try again, I need more convincing!</button>
+                        </div>
+                    </div>`;
+            };
+
+            window.extraPage = function(){
+                document.getElementById("slide5").innerHTML = `
+                    <div class="content">
+                        <img src="https://i.postimg.cc/3w76dJ0r/Whats-App-Image-2025-11-07-at-15-42-12-8041a53f.jpg" alt="Couple Pic">
+                        <div class="extra-buttons">
+                            <button onclick="nextSlide(6)">Okay, okay, I'm convinced! 😒</button>
+                            <button onclick="nextSlide(6)">Stop making me look at this awesome picture! 😂</button>
+                        </div>
+                    </div>`;
+            };
+
+            // Hearts Rain setup (Kept the hearts animation as a celebration)
+            const heartsContainer = document.getElementById('hearts');
+            window.createHeart = function(){
+                const heart = document.createElement('span');
+                heart.className = 'heart';
+                heart.textContent = '🐒'; // Changed to a star for a platonic twist, but keep 'heart' class for styles
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (3 + Math.random()*3) + 's';
+                heartsContainer.appendChild(heart);
+                setTimeout(() => heart.remove(), 6000); // Remove heart after animation
+            }
+            let heartInterval = null;
+            window.startHearts = function(){
+                if (heartInterval) return; // Prevent multiple intervals
+                heartsContainer.style.display = 'block';
+                heartInterval = setInterval(createHeart, 400); // Creates a new heart every 400ms
+            }
+            window.stopHearts = function(){
+                if (!heartInterval) return;
+                clearInterval(heartInterval);
+                heartInterval = null;
+                heartsContainer.innerHTML = ''; // Clears all hearts
+                heartsContainer.style.display = 'none';
+            }
+
+            window.finalLove = function(){
+                startHearts(); // Start the celebration animation
+                const c = document.querySelector('#slide6 .content');
+                c.insertAdjacentHTML('beforeend', `<h2 class="sacramento-font">Hehe Good Decision</h2>`);
+                setTimeout(() => { showCustomAlert("HATE U TOO bandar🐒"); }, 3000); 
+            }
+
+            // Dodge buttons functionality for laptop version
+            document.addEventListener("mousemove", function (e) {
+                document.querySelectorAll(".dodge").forEach((btn) => {
+                    const rect = btn.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const distX = e.clientX - centerX;
+                    const distY = e.clientY - centerY;
+                    const distance = Math.sqrt(distX ** 2 + distY ** 2);
+
+                    // Ensure dodge buttons are positioned 'fixed' before calculating new position
+                    if (btn.style.position !== 'fixed' && btn.parentElement.closest('.slide.active')) {
+                         btn.style.position = 'fixed';
+                    }
+
+                    if (distance < 120) { // If mouse is too close
+                        const randomX = Math.random() * (window.innerWidth - rect.width);
+                        const randomY = Math.random() * (window.innerHeight - rect.height);
+
+                        btn.style.transition = "transform 0.3s ease";
+                        btn.style.left = randomX + "px";
+                        btn.style.top = randomY + "px";
+                    } else if (btn.style.position === 'fixed' && !btn.parentElement.closest('.slide.active')) {
+                        // Reset if the slide is no longer active (prevents buttons from floating globally)
+                        btn.style.position = 'relative'; 
+                        btn.style.left = 'auto';
+                        btn.style.top = 'auto';
+                    }
+                });
+            });
+        }
+
+        // --- Mobile slides (Best Friend Edition - same as laptop but without dodge buttons) ---
+        function mobileSlides(){
+            slideContainer.innerHTML = `
+                <section class="slide active" id="slide1">
+                    <div class="content">
+                        <h1>Hiilloo! 👀</h1>
+                        <h2>ou weirdo 😉</h2>
+                        <p>Sorry for being annoying sometimes..But i will still annoy you 😅</p>
+                        <button id="playSongBtn">Play song 👉🏻 This song reminds me of our dumb adventures 🎵</button>
+                        <button id="okBtn" style="display:none;" onclick="nextSlide('M')">It's Okay, let's just make new memories! 🥳</button>
+                    </div>
+                </section>
+
+                <!-- NEW: slideM (Letter) -->
+                <section class="slide" id="slideM">
+                    <div class="content">
+                        <div class="letter-wrap">
+                            <div class="letter-closed" onclick="openLetterM()" role="button" aria-label="Tap on the heart">
+                                <div class="big-heart">💙</div>
+                            </div>
+                            <p class="tap-hint">Tap on the heart</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="slide" id="slide2">
+                    <div class="content">
+                        <h1 class="chalkboy-font">Happy Birthday Bestfriend💙</h1>
+                        <img src="https://i.postimg.cc/ZK2JQ391/IMG-20251107-WA0037-1.jpg" alt="His Pic" />
+                        <p>Mr Besharam.. You make my dull days brighter. Thank You for existing, you legend.</p>
+                        <P>Also Happy 3yrs of bestfrienship yaar..</p>
+                        <p>Some days you’ve been my support, some days my headache, but every day 💛 Honestly, I don’t know how I got so lucky with a friend who’s part chaos, part comfort, and 100% unforgettable.</p>
+                        <button onclick="nextSlide(3)">Hehehe sukriya sukriya🤪</button>
+                    </div>
+                </section>
+
+                <section class="slide" id="slide3">
+                    <div class="content">
+                        <img src="https://i.postimg.cc/qqndVD6W/Whats-App-Image-2025-11-07-at-15-48-09-bac0b3ca.jpg" alt="His Pic 2" />
+                        <p class="chalkboy-font">Dude, seriously though, I appreciate you. 💯</p>
+                        <p>I know I can be bossy (generally ..tere samne ka baat ni), but you still listen to me when it matters, right?</p>
+                        <div>
+                            <button onclick="heartsPage()">Of course! I'm the best listener. 💯</button>
+                            <button onclick="sorryLine()">Listen? I ignore you half the time! 😜</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="slide" id="slide4">
+                    <div class="content">
+                        <div class="side-by-side">
+                            <img src="https://i.postimg.cc/rpz32ZvQ/IMG-20251107-WA0049-1.jpg" />
+                            <img src="https://i.postimg.cc/zvT4PL9f/Whats-App-Image-2025-11-07-at-15-42-13-a712592a.jpg" />
+                        </div>
+                        <p id="q4">Who else is going to put up with your nonsense and still share food with you?(except US)</p>
+                        <div>
+                            <button id="btn1" onclick="bhagOption()">Bahut sare hain..naam lu kya?? (😎)</button>
+                            <button onclick="nextSlide(5)">Nahh nahh meri eklauti tu bestfriend hai..tu jhelti hai😗</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="slide" id="slide5">
+                    <div class="content">
+                        <img src="https://i.postimg.cc/PryvBSbM/Whats-App-Image-2025-11-07-at-15-42-04-dec52dd9.jpg" alt="Couple Pic">
+                        <h2>Don't you think we make the best (and weirdest) friendship duo? 🫠🤣</h2>
+                        <div>
+                            <!-- Disabled button for mobile to avoid dodge effect -->
+                            <button disabled style="opacity:0.5; cursor:not-allowed;">Nahhh, you're the weird one.</button>
+                            <button onclick="yesLine()">Haaaan re gadhi 🤍</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="slide" id="slide6">
+                    <div class="content">
+                        <h1 class="chalkboy-font">Will you be my Bestfriend Forever? ♾️</h1>
+                        <h2>I know you already are...Through the good times and the bad, I want you to be the one who always has my back. You're stuck with me idiot..This also means you are npot going to jalofy me by saying "Isko Usko bestfriend banaleta hai"</h2>
+
+                        <div class="side-by-side">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvN0chB232BSwRksIS4lds7cpx6g6xKngNhA&s" alt="Final Gif">
+                            <img src="https://i.postimg.cc/7PX3SPCs/Whats-App-Image-2025-11-07-at-15-42-07-a823719e.jpg" alt="Pic Between GIFs"
+                                    style="max-width: 20%; max-height: 50vh; object-fit: contain; border-radius: 15px;">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSicub8O7Lf2MiTtHCVjaUzML7vnw9dQJ3q5R5_7D0ZwZpTzBbfX2RWJPA9Fpk67FUpenQ&usqp=CAU" alt="Bubu Dudu Love GIF">
+                        </div>
+                        <div>
+                            <button onclick="finalLove()">YESSSSSS</button>
+                            <!-- Disabled button for mobile to avoid dodge effect -->
+                            <button disabled style="opacity:0.5; cursor:not-allowed;">Sochna padega</button>
+                        </div>
+                    </div>
+                </section>
+            `;
+
+            currentSlide = 1;
+
+            // Event listener for playing the song for mobile
+            document.getElementById("playSongBtn").addEventListener("click", () => {
+                bgSong.play().catch(()=>{});
+                document.getElementById("playSongBtn").style.display = "none";
+                document.getElementById("okBtn").style.display = "inline-block";
+            });
+
+            window.nextSlide = nextSlide;
+            window.openLetterM = openLetterM;
+
+            // Dynamic content update functions for mobile version (re-defined to ensure they target the new innerHTML)
+            window.heartsPage = function(){
+                document.getElementById("slide3").innerHTML = `
+                    <div class="content">
+                        <h1>O Best listener ..kab ek bari mein sunn leta hai be tu..10-10 baar bheek mangne pe darshan deta hai gadha ...bandar kahi ka</h1>
+                        <button onclick="nextSlide(4)">Bhaggg ja</button>
+                    </div>`;
+            };
+
+            window.sorryLine = function(){
+                showCustomAlert("Chal re I am the only boss here. Now move to the next slide! 😂");
+                nextSlide(4);
+            };
+
+            window.bhagOption = function(){
+                document.getElementById("slide4").innerHTML = `
+                    <div class="content">
+                        <h1>Kahe natak karta hai besharam....itna muskil se tereko 3saal se jhel raha hum aur tu hai ki "izzat" hee nhi deta...😒</h1>
+                        <button onclick="nextSlide(5)">Okay fine 😝🤍</button>
+                    </div>`;
+            };
+
+            window.yesLine = function(){
+                showCustomAlert("Pata tha..options ni tere paas😎");
+                document.getElementById("slide5").innerHTML = `
+                    <div class="content">
+                        <img src="https://i.postimg.cc/bJxR7QwP/Whats-App-Image-2025-11-07-at-15-42-05-38a7ce4d.jpg" alt="Couple Pic">
+                        <p>MY WISH IS — Can we promise to stay partners in crime forever? 🤝</p>
+                        <div>
+                            <button onclick="nextSlide(6)">Yes! Forever and always. 💯</button>
+                            <button onclick="extraPage()">Try again, I need more convincing!</button>
+                        </div>
+                    </div>`;
+            };
+
+            window.extraPage = function(){
+                document.getElementById("slide5").innerHTML = `
+                    <div class="content">
+                        <img src="https://i.postimg.cc/3w76dJ0r/Whats-App-Image-2025-11-07-at-15-42-12-8041a53f.jpg" alt="Couple Pic">
+                        <div class="extra-buttons">
+                            <button onclick="nextSlide(6)">Okay, okay, I'm convinced! 😒</button>
+                            <button onclick="nextSlide(6)">Stop making me look at this awesome picture! 😂</button>
+                        </div>
+                    </div>`;
+            };
+
+            // Hearts Rain setup (Kept the hearts animation as a celebration)
+            const heartsContainer = document.getElementById('hearts');
+            window.createHeart = function(){
+                const heart = document.createElement('span');
+                heart.className = 'heart';
+                heart.textContent = '🐒';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (3 + Math.random()*3) + 's';
+                heartsContainer.appendChild(heart);
+                setTimeout(() => heart.remove(), 6000); // Remove heart after animation
+            }
+            let heartInterval = null;
+            window.startHearts = function(){
+                if (heartInterval) return; // Prevent multiple intervals
+                heartsContainer.style.display = 'block';
+                heartInterval = setInterval(createHeart, 400); // Creates a new heart every 400ms
+            }
+            window.stopHearts = function(){
+                if (!heartInterval) return;
+                clearInterval(heartInterval);
+                heartInterval = null;
+                heartsContainer.innerHTML = ''; // Clears all hearts
+                heartsContainer.style.display = 'none';
+            }
+
+
+            window.finalLove = function(){
+                startHearts(); // Start the celebration animation
+                const c = document.querySelector('#slide6 .content');
+                c.insertAdjacentHTML('beforeend', `<h2 class="sacramento-font">Hehe Good Decision</h2>`);
+                setTimeout(() => { showCustomAlert("HATE U TOO bandar🐒"); }, 3000); 
+            }
+        }
+
+        // Device choice buttons on Slide 0
+        document.getElementById('mobileBtn').addEventListener('click', () => {
+            mobileSlides();
+        });
+
+        document.getElementById('laptopBtn').addEventListener('click', () => {
+            laptopSlides();
+        });
+    </script>
+</body>
+</html>
+
+
+
+
